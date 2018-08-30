@@ -1,12 +1,15 @@
 import sys
 
 filename = sys.argv[1]
+tsv_file_name = sys.argv[2]
+
 count = 0
-csv_file_name = '../Dataset/titles.csv'
 
 file = open(filename, 'r', errors='ignore')
-csv_file = open(csv_file_name, 'w+', errors='ignore')
+tsv_file = open(tsv_file_name, 'w+', errors='ignore')
 new_line = ''
+
+tsv_file.write('asin\ttitle\tcategory\tsalesrank\n')
 
 for line in file:
     if(count < 7):
@@ -23,14 +26,14 @@ for line in file:
         asin = line[1].split('\n')
         asin = asin[0]
         #print("ASIN: " + str(asin))
-        new_line = new_line + asin + ','
+        new_line = new_line + asin + '\t'
 
     if(label == '  title'):
         line = line.replace('  title: ', '')
         title = line.split('\n')
         title = title[0]
         #print("TID: " + str(tid) + " ")
-        new_line = new_line + title + ','
+        new_line = new_line + title + '\t'
     
     if('discontinued product' in line):
         new_line = ''
@@ -41,7 +44,7 @@ for line in file:
         group = line.split('\n')
         group = group[0]
         #print("TID: " + str(tid) + " ")
-        new_line = new_line + group + ','
+        new_line = new_line + group + '\t'
 
     if(label == '  salesrank'):
         line = line.replace('  salesrank: ', '')
@@ -49,6 +52,6 @@ for line in file:
         salesrank = salesrank[0]
         #print("TID: " + str(tid) + " ")
         new_line = new_line + salesrank
-        csv_file.write(new_line + '\n')
+        tsv_file.write(new_line + '\n')
         new_line = ''
 

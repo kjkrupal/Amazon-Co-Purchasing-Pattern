@@ -1,16 +1,17 @@
 import sys
 
 filename = sys.argv[1]
+reviews_file_name = sys.argv[2]
+reviews_meta_file_name = sys.argv[3]
+
 count = 0
-reviews_file_name = '../Dataset/reviews.csv'
-reviews_meta_file_name = '../Dataset/reviews-meta.csv'
 
 file = open(filename, 'r', errors='ignore')
 reviews_file = open(reviews_file_name, 'w+', errors='ignore')
 reviews_meta_file = open(reviews_meta_file_name, 'w+', errors='ignore')
 
-reviews_file.write('asin,date,customer_id,rating,votes,helpful\n')
-reviews_meta_file.write('asin,total,downloaded,avg_rating\n')
+reviews_file.write('asin\tdate\tcustomer_id\trating\tvotes\thelpful\n')
+reviews_meta_file.write('asin\ttotal\tdownloaded\tavg_rating\n')
 
 new_line = ''
 asin_val = 0
@@ -31,7 +32,7 @@ for line in file:
         asin = line[1].split('\n')
         asin = asin[0]
         asin_val = asin
-        new_line = new_line + asin + ','
+        new_line = new_line + asin + '\t'
     
     if('discontinued product' in line):
         new_line = ''
@@ -53,11 +54,11 @@ for line in file:
             review_line = review_line.replace('votes:', ',')
             review_line = review_line.replace('helpful:', ',')
             review_line = review_line.split(',')
-            item_line = asin_val + ','
+            item_line = asin_val + '\t'
             for items in review_line:
                 items = items.replace(' ', '')
-                item_line = item_line + items + ','
+                item_line = item_line + items + '\t'
             
             reviews_file.write(item_line[:-1])
         
-        reviews_meta_file.write(asin_val + ',' + total + ',' + str(downloaded) + ',' + avg_rating)
+        reviews_meta_file.write(asin_val + '\t' + total + '\t' + str(downloaded) + '\t' + avg_rating)
